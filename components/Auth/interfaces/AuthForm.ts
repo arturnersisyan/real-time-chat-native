@@ -20,6 +20,8 @@ export interface IValid {
 }
 
 export interface ISubmit {
+  name?: string;
+  age?: number;
   email: string;
   confirmEmail: string;
   password: string;

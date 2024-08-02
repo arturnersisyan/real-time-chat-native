@@ -14,6 +14,8 @@ const AuthForm: React.FC<IForm> = ({
   const [enteredConfirmEmail, setEnteredConfirmEmail] = useState("");
   const [enteredPassword, setEnteredPassword] = useState("");
   const [enteredConfirmPassword, setEnteredConfirmPassword] = useState("");
+  const [enteredName, setEnteredName] = useState("");
+  const [enteredAge, setEnteredAge] = useState(undefined);
 
   const {
     email: emailIsInvalid,
@@ -25,10 +27,10 @@ const AuthForm: React.FC<IForm> = ({
   function updateInputValueHandler(inputType: InputType, enteredValue: any) {
     switch (inputType) {
       case "age":
-        setEnteredEmail(enteredValue);
+        setEnteredAge(enteredValue);
         break;
       case "name":
-        setEnteredEmail(enteredValue);
+        setEnteredName(enteredValue);
         break;
       case "email":
         setEnteredEmail(enteredValue);
@@ -46,12 +48,23 @@ const AuthForm: React.FC<IForm> = ({
   }
 
   function submitHandler() {
-    onSubmit({
-      email: enteredEmail,
-      confirmEmail: enteredConfirmEmail,
-      password: enteredPassword,
-      confirmPassword: enteredConfirmPassword,
-    });
+    if (isLogin) {
+      onSubmit({
+        email: enteredEmail,
+        confirmEmail: enteredConfirmEmail,
+        password: enteredPassword,
+        confirmPassword: enteredConfirmPassword,
+      });
+    } else {
+      onSubmit({
+        name: enteredName,
+        age: enteredAge,
+        email: enteredEmail,
+        confirmEmail: enteredConfirmEmail,
+        password: enteredPassword,
+        confirmPassword: enteredConfirmPassword,
+      });
+    }
   }
 
   return (
@@ -60,20 +73,10 @@ const AuthForm: React.FC<IForm> = ({
         {!isLogin && (
           <Input
             label="Name"
-            onUpdateValue={updateInputValueHandler.bind(this, "confirmEmail")}
-            value={enteredConfirmEmail}
+            onUpdateValue={updateInputValueHandler.bind(this, "name")}
+            value={enteredName}
             secure={false}
-            isInvalid={emailsDontMatch}
-          />
-        )}
-        {!isLogin && (
-          <Input
-            label="Name"
-            onUpdateValue={updateInputValueHandler.bind(this, "confirmEmail")}
-            value={enteredConfirmEmail}
-            keyboardType="numeric"
-            secure={false}
-            isInvalid={emailsDontMatch}
+            isInvalid={false}
           />
         )}
         <Input
@@ -111,6 +114,16 @@ const AuthForm: React.FC<IForm> = ({
             secure={true}
             value={enteredConfirmPassword}
             isInvalid={passwordsDontMatch}
+          />
+        )}
+        {!isLogin && (
+          <Input
+            label="Age"
+            onUpdateValue={updateInputValueHandler.bind(this, "age")}
+            value={enteredAge}
+            keyboardType="number-pad"
+            secure={false}
+            isInvalid={false}
           />
         )}
         <View style={styles.buttons}>

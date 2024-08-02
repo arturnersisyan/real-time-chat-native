@@ -1,10 +1,23 @@
 import Button from "@/components/ui/Button";
 import { Colors } from "@/constants/style";
-import { Link, router } from "expo-router";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { router } from "expo-router";
+import { View, Text, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthContext } from "@/context/AuthContext";
+import { useContext, useEffect } from "react";
 
-const Welcome = () => {
+const WelcomeScreen = () => {
+  const authCtx = useContext(AuthContext);
+
+  useEffect(() => {
+    const checkIsLoggedIn = () => {
+      if(authCtx.authentificated) {
+        return router.replace('/start')
+      }
+    }
+    checkIsLoggedIn();
+  },[authCtx.authentificated])
+
   const loginRoutHandler = () => {
     router.replace("/signIn");
   };
@@ -20,10 +33,10 @@ const  signUpHandler = () => {
           <Text style={styles.Text}>Welcome Evchat</Text>
         </View>
         <View style={styles.Button}>
-          <Button onPress={loginRoutHandler}>Home</Button>
+          <Button onPress={loginRoutHandler}>Log In</Button>
         </View>
         <View style={styles.Button}>
-          <Button onPress={signUpHandler}>Home</Button>
+          <Button onPress={signUpHandler}>Sign Up</Button>
         </View>
       </View>
     </SafeAreaView>
@@ -44,4 +57,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Welcome;
+export default WelcomeScreen;

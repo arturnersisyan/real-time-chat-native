@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
 
-const HomeScreen = () => {
+const chatScreen = () => {
   return (
     <View>
-      <Text>Home</Text>
+      <Text>Chat</Text>
     </View>
   );
 };
 
-export default HomeScreen;
+export default chatScreen;

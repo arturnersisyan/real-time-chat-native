@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Alert, StyleSheet, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 
 import FlatButton from "../ui/Button";
 import AuthForm from "./AuthForm";
@@ -8,19 +7,19 @@ import { Colors } from "../../constants/style";
 import { router } from "expo-router";
 import { ISubmit } from "./interfaces/AuthForm";
 
-interface IContent {
-  isLogin: boolean;
-  onAuthenticate: (value: IAuthenticate) => void;
-}
-
-interface IAuthenticate {
+export interface IAuth {
+  name?: string;
+  age?: number;
   email: string;
   password: string;
 }
 
-const AuthContent: React.FC<IContent> = ({ isLogin, onAuthenticate }) => {
-  const navigation = useNavigation();
+interface IContent {
+  isLogin: boolean;
+  onAuthenticate: (value: IAuth) => Promise<any>;
+}
 
+const AuthContent: React.FC<IContent> = ({ isLogin, onAuthenticate }) => {
   const [credentialsInvalid, setCredentialsInvalid] = useState({
     email: false,
     password: false,
@@ -37,7 +36,8 @@ const AuthContent: React.FC<IContent> = ({ isLogin, onAuthenticate }) => {
   }
 
   function submitHandler(credentials: ISubmit) {
-    let { email, confirmEmail, password, confirmPassword } = credentials;
+    let { name, age, email, confirmEmail, password, confirmPassword } =
+      credentials;
 
     email = email.trim();
     password = password.trim();
@@ -61,7 +61,12 @@ const AuthContent: React.FC<IContent> = ({ isLogin, onAuthenticate }) => {
       });
       return;
     }
-    onAuthenticate({ email, password });
+    if(!isLogin) {
+      onAuthenticate({ name, age, email, password });
+    } else {
+      onAuthenticate({ email, password})
+    }
+    
   }
 
   return (
